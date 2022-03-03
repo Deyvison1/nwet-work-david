@@ -10,8 +10,12 @@ import api.networkn.models.dtos.ProductDTO;
 @Service
 public interface IProductService {
 	
-	Product addOrUpdateProduct(Product product);
+	Product addProduct(Product product);
+	
+	Product updateProduct(Long product);
 	
 	List<ProductDTO> getAll();
+	
+	void deleteProduct(Long id);
 		
 }

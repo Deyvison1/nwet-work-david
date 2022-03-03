@@ -34,6 +34,14 @@ public class Product implements Serializable {
 	
 	private String description;
 	
+	private Integer speedDownload;
+	
+	private Integer speedUpload;
+	
+	private BigDecimal taxaAdesao;
+	
+	private BigDecimal valueWifi;
+	
 	private BigDecimal value;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
