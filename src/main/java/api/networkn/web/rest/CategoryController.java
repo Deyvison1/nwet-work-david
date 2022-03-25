@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
+import api.networkn.models.dtos.LabelValueDTO;
 import api.networkn.services.ICategoryService;
 import lombok.AllArgsConstructor;
 
@@ -38,6 +39,11 @@ public class CategoryController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X_TOTAL_COUNT", String.valueOf(total));
 		return new ResponseEntity<List<Category>>(listCategory.getContent(), headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-all")
+	public List<LabelValueDTO> getAll() {
+		return categoryService.getAll();
 	}
 	
 	@PostMapping
