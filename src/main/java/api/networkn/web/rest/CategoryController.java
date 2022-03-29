@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
-import api.networkn.models.dtos.LabelValueDTO;
 import api.networkn.services.ICategoryService;
 import lombok.AllArgsConstructor;
 
@@ -42,7 +41,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/get-all")
-	public List<LabelValueDTO> getAll() {
+	public List<CategoryDTO> getAll() {
 		return categoryService.getAll();
 	}
 	

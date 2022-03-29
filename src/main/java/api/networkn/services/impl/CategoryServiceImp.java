@@ -1,6 +1,5 @@
 package api.networkn.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
-import api.networkn.models.dtos.LabelValueDTO;
 import api.networkn.models.repository.CategoryRepository;
 import api.networkn.services.ICategoryService;
 import api.networkn.utils.mappers.ICategoryMapper;
@@ -64,17 +62,8 @@ public class CategoryServiceImp implements ICategoryService {
 	}
 
 	@Override
-	public List<LabelValueDTO> getAll() {
-		return toLabelValueDTO(categoryRepository.findAll());
-	}
-	
-	private List<LabelValueDTO> toLabelValueDTO(List<Category> listCategory) {
-		List<LabelValueDTO> listLabelValueDTO = new ArrayList<>();
-		listCategory.forEach(x -> {
-			listLabelValueDTO.add(LabelValueDTO.builder().value(x.getId()).label(x.getName()).build());
-		});
-		
-		return listLabelValueDTO;
+	public List<CategoryDTO> getAll() {
+		return categoryMapper.toList(categoryRepository.findAll());
 	}
 
 }

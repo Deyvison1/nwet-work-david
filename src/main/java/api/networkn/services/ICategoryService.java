@@ -8,13 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
-import api.networkn.models.dtos.LabelValueDTO;
 
 public interface ICategoryService {
 
 	Page<Category> getAll(Pageable pageable);
 	
-	List<LabelValueDTO> getAll();
+	List<CategoryDTO> getAll();
 	
 	CategoryDTO insert(Category category);
 	
