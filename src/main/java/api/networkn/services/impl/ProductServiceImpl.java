@@ -1,9 +1,12 @@
 package api.networkn.services.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import api.networkn.models.Product;
@@ -16,20 +19,19 @@ import api.networkn.utils.mappers.IProductMapper;
 public class ProductServiceImpl implements IProductService {
 
 	private IProductRepository productRepository;
-
-	private IProductMapper mapper;
+	private IProductMapper productMapper;
 
 	@Autowired
-	public ProductServiceImpl(IProductRepository productRepository, IProductMapper mapper) {
+	public ProductServiceImpl(IProductRepository productRepository, IProductMapper productMapper) {
 		this.productRepository = productRepository;
-		this.mapper = mapper;
+		this.productMapper = productMapper;
 	}
 
 	@Override
 	public Product updateProduct(Long productId) {
-		Optional<Product> product = productRepository.findById(productId);
-		if (product.isPresent()) {
-			Product productAAtualizar = mountProduct(product.get());
+		Product product = findById(productId);
+		if (Objects.nonNull(product)) {
+			Product productAAtualizar = mountProduct(product);
 			return productRepository.save(productAAtualizar);
 		}
 		return null;
@@ -37,10 +39,19 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public void deleteProduct(Long productId) {
-		Optional<Product> product = productRepository.findById(productId);
-		if (product.isPresent()) {
-			productRepository.delete(product.get());
+		Product product = findById(productId);
+		if (Objects.nonNull(product)) {
+			productRepository.delete(product);
 		}
+	}
+	
+	@Override
+	public Product findById(Long id) {
+		Optional<Product> product = productRepository.findById(id);
+		if(product.isPresent()) {
+			return product.get();
+		}
+		return null;
 	}
 
 	@Override
@@ -56,8 +67,18 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
+	public Page<Product> getAll(Pageable page) {
+		return productRepository.findAll(page);
+	}
+	
+	@Override
 	public List<ProductDTO> getAll() {
-		return mapper.toList(productRepository.findAll());
+		return productMapper.toList(productRepository.findAll());
+	}
+
+	@Override
+	public Long contarTodos() {
+		return productRepository.countBy();
 	}
 
 }

@@ -3,12 +3,10 @@ package api.networkn.models;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -43,8 +41,7 @@ public class Product implements Serializable {
 	private BigDecimal valueWifi;
 	
 	private BigDecimal value;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
+
 	private Category category;
 	
 	public Product() {}
