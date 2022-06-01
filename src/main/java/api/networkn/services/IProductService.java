@@ -14,7 +14,7 @@ public interface IProductService {
 	
 	Product addProduct(Product product);
 	
-	Product updateProduct(Long product);
+	ProductDTO updateProduct(ProductDTO Product);
 	
 	Page<Product> getAll(Pageable page);
 	

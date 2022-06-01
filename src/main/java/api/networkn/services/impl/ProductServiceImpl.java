@@ -28,13 +28,20 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Product updateProduct(Long productId) {
-		Product product = findById(productId);
+	public ProductDTO updateProduct(ProductDTO productDTO) {
+		Product product = findById(productDTO.getId());
 		if (Objects.nonNull(product)) {
-			Product productAAtualizar = mountProduct(product);
-			return productRepository.save(productAAtualizar);
+			Product productAAtualizar = mountProduct(productDTO);
+			return productMapper.productToProductDTO(productRepository.save(productAAtualizar));
 		}
 		return null;
+	}
+	
+	private Product mountProduct(ProductDTO productDTO) {
+		return Product.builder().category(productDTO.getCategory()).name(productDTO.getName())
+				.description(productDTO.getDescription()).value(productDTO.getValue()).id(productDTO.getId())
+				.speedDownload(productDTO.getSpeedDownload()).speedUpload(productDTO.getSpeedUpload())
+				.taxaAdesao(productDTO.getTaxaAdesao()).valueWifi(productDTO.getValueWifi()).build();
 	}
 
 	@Override
@@ -57,13 +64,6 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product addProduct(Product product) {
 		return productRepository.save(product);
-	}
-
-	private Product mountProduct(Product product) {
-		return Product.builder().category(product.getCategory()).name(product.getName())
-				.description(product.getDescription()).value(product.getValue()).id(product.getId())
-				.speedDownload(product.getSpeedDownload()).speedUpload(product.getSpeedUpload())
-				.taxaAdesao(product.getTaxaAdesao()).valueWifi(product.getValueWifi()).build();
 	}
 
 	@Override

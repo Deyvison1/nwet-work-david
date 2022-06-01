@@ -51,8 +51,8 @@ public class CategoryController {
 	}
 	
 	@PutMapping
-	public CategoryDTO update(@RequestBody Category category) {
-		return categoryService.update(category);
+	public CategoryDTO update(@RequestBody CategoryDTO categoryDTO) {
+		return categoryService.update(categoryDTO);
 	}
 	
 	@DeleteMapping("/{categoryId}")

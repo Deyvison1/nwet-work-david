@@ -40,16 +40,16 @@ public class CategoryServiceImp implements ICategoryService {
 	}
 
 	@Override
-	public CategoryDTO update(Category category) {
-		Category categoryById = categoryRepository.findById(category.getId()).orElseThrow();
+	public CategoryDTO update(CategoryDTO categoryDTO) {
+		Category categoryById = categoryRepository.findById(categoryDTO.getId()).orElseThrow();
 		if (Objects.isNull(categoryById)) {
 			return null;
 		}
-		return categoryMapper.categoryToCategoryDTO(categoryRepository.save(montarCategory(categoryById)));
+		return categoryMapper.categoryToCategoryDTO(categoryRepository.save(montarCategory(categoryDTO)));
 	}
 
-	private Category montarCategory(Category category) {
-		return Category.builder().id(category.getId()).description(category.getDescription()).name(category.getName()).build();
+	private Category montarCategory(CategoryDTO categoryDTO) {
+		return Category.builder().id(categoryDTO.getId()).description(categoryDTO.getDescription()).name(categoryDTO.getName()).build();
 	}
 
 	@Override
