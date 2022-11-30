@@ -22,7 +22,6 @@ import api.networkn.models.dtos.ProductDTO;
 import api.networkn.services.IProductService;
 import lombok.AllArgsConstructor;
 
-@CrossOrigin(origins = "*", exposedHeaders = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/product")
 @AllArgsConstructor

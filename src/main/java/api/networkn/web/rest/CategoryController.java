@@ -22,9 +22,8 @@ import api.networkn.models.dtos.CategoryDTO;
 import api.networkn.services.ICategoryService;
 import lombok.AllArgsConstructor;
 
-@CrossOrigin(origins = "*", exposedHeaders = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 @AllArgsConstructor
 public class CategoryController {
 	
