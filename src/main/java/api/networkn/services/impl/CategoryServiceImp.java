@@ -31,7 +31,7 @@ public class CategoryServiceImp implements ICategoryService {
 		if (Objects.isNull(category)) {
 			return null;
 		}
-		return categoryMapper.categoryToCategoryDTO(categoryRepository.save(category));
+		return categoryMapper.toDto(categoryRepository.save(category));
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class CategoryServiceImp implements ICategoryService {
 		if (Objects.isNull(categoryById)) {
 			return null;
 		}
-		return categoryMapper.categoryToCategoryDTO(categoryRepository.save(montarCategory(categoryDTO)));
+		return categoryMapper.toDto(categoryRepository.save(montarCategory(categoryDTO)));
 	}
 
 	private Category montarCategory(CategoryDTO categoryDTO) {
@@ -63,7 +63,7 @@ public class CategoryServiceImp implements ICategoryService {
 
 	@Override
 	public List<CategoryDTO> getAll() {
-		return categoryMapper.toList(categoryRepository.findAll());
+		return categoryMapper.toDto(categoryRepository.findAll());
 	}
 
 }

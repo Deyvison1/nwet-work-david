@@ -1,18 +1,11 @@
 package api.networkn.utils.mappers;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
 import api.networkn.models.Product;
 import api.networkn.models.dtos.ProductDTO;
 
-@Mapper(componentModel = "spring")
-public interface IProductMapper {
-
-	ProductDTO productToProductDTO(Product parcela);
-
-	List<ProductDTO> toList(Collection<Product> parcelas);
-
+@Mapper(componentModel="spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface IProductMapper extends BaseEntityMapper<Product, ProductDTO> {
 }

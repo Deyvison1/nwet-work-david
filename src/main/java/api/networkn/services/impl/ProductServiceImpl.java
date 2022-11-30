@@ -32,7 +32,7 @@ public class ProductServiceImpl implements IProductService {
 		Product product = findById(productDTO.getId());
 		if (Objects.nonNull(product)) {
 			Product productAAtualizar = mountProduct(productDTO);
-			return productMapper.productToProductDTO(productRepository.save(productAAtualizar));
+			return productMapper.toDto(productRepository.save(productAAtualizar));
 		}
 		return null;
 	}
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements IProductService {
 	
 	@Override
 	public List<ProductDTO> getAll() {
-		return productMapper.toList(productRepository.findAll());
+		return productMapper.toDto(productRepository.findAll());
 	}
 
 	@Override
