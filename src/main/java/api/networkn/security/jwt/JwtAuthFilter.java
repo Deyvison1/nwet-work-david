@@ -1,6 +1,7 @@
 package api.networkn.security.jwt;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if( authorization != null && authorization.startsWith("Bearer")){
             String token = authorization.split(" ")[1];
             boolean isValid = jwtService.tokenValido(token);
-
+            
             if(isValid){
                 String loginUsuario = jwtService.obterLoginUsuario(token);
                 UserDetails usuario = usuarioService.loadUserByUsername(loginUsuario);

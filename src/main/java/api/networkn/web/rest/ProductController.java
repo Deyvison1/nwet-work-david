@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class ProductController {
 
 	private final IProductService productService;
 	
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	@GetMapping
 	public ResponseEntity<List<Product>> getAll(Pageable pageable) {
 		Page<Product> listProduct = productService.getAll(pageable);
@@ -38,22 +40,25 @@ public class ProductController {
 		headers.add("X_TOTAL_COUNT", String.valueOf(total));
 		return new ResponseEntity<List<Product>>(listProduct.getContent(), headers, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/get-all")
 	public ResponseEntity<List<ProductDTO>> getAll() {
 		return ResponseEntity.ok(productService.getAll());
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<Product> add(@RequestBody Product product) {
 		return ResponseEntity.ok(productService.addProduct(product));
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO) {
 		return ResponseEntity.ok(productService.updateProduct(productDTO));
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		productService.deleteProduct(id);

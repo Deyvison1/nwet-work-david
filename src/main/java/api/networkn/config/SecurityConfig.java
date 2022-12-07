@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,6 +29,7 @@ import api.networkn.services.impl.UsuarioServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer  {
 
     @Autowired
@@ -57,15 +59,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http
             .csrf().disable()
             .cors().configurationSource(corsConfigurationSource()).and()
-            .authorizeRequests()
-                .antMatchers("/api/category/**")
-                    .hasAnyRole("USER", "ADMIN")
-                    .antMatchers(HttpMethod.POST, "/api/usuario/**")
-                    .permitAll()
-                    .antMatchers(HttpMethod.GET, "/product/**")
-                    .permitAll()
-                
-                .anyRequest().authenticated()
+            .antMatcher("/**").authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/api/usuario/**")
+            .permitAll()
+            .antMatchers(HttpMethod.GET, "/product/get-all")
+            .permitAll()
+            .antMatchers("/").permitAll()
+            .anyRequest().authenticated()
             .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

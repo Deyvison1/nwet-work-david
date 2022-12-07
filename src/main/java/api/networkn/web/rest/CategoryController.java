@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
@@ -29,6 +30,7 @@ public class CategoryController {
 	
 	private final ICategoryService categoryService;
 	
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	@GetMapping
 	public ResponseEntity<List<Category>> getAll(Pageable pageable) {
 		Page<Category> listCategory = categoryService.getAll(pageable);
@@ -39,21 +41,25 @@ public class CategoryController {
 		return new ResponseEntity<List<Category>>(listCategory.getContent(), headers, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	@GetMapping("/get-all")
 	public List<CategoryDTO> getAll() {
 		return categoryService.getAll();
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public CategoryDTO insert(@RequestBody Category category) {
 		return categoryService.insert(category);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	public CategoryDTO update(@RequestBody CategoryDTO categoryDTO) {
 		return categoryService.update(categoryDTO);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{categoryId}")
 	public void delete(@PathVariable Long categoryId) {
 		categoryService.delete(categoryId);
