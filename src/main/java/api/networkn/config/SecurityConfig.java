@@ -1,6 +1,5 @@
 package api.networkn.config;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import api.networkn.security.jwt.JwtAuthFilter;
@@ -57,20 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     protected void configure( HttpSecurity http ) throws Exception {
         http
-            .csrf().disable()
-            .cors().configurationSource(corsConfigurationSource()).and()
-            .antMatcher("/**").authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/usuario/**")
-            .permitAll()
-            .antMatchers(HttpMethod.GET, "/product/get-all")
-            .permitAll()
-            .antMatchers("/").permitAll()
-            .anyRequest().authenticated()
-            .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-                .addFilterBefore( jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .antMatcher("/**").authorizeRequests(requests -> requests
+                .antMatchers(HttpMethod.POST, "/api/usuario/**")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/product/get-all")
+                .permitAll()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated())
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
     
     @Bean
