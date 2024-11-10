@@ -14,17 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @Table
-@Builder
-@AllArgsConstructor
-@Getter
-@Setter
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -57,6 +48,94 @@ public class Product implements Serializable {
 	private LocalDateTime updatedAt;
 
 	public Product() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getSpeedDownload() {
+		return speedDownload;
+	}
+
+	public void setSpeedDownload(Integer speedDownload) {
+		this.speedDownload = speedDownload;
+	}
+
+	public Integer getSpeedUpload() {
+		return speedUpload;
+	}
+
+	public void setSpeedUpload(Integer speedUpload) {
+		this.speedUpload = speedUpload;
+	}
+
+	public BigDecimal getTaxaAdesao() {
+		return taxaAdesao;
+	}
+
+	public void setTaxaAdesao(BigDecimal taxaAdesao) {
+		this.taxaAdesao = taxaAdesao;
+	}
+
+	public BigDecimal getValueWifi() {
+		return valueWifi;
+	}
+
+	public void setValueWifi(BigDecimal valueWifi) {
+		this.valueWifi = valueWifi;
+	}
+
+	public BigDecimal getValue() {
+		return value;
+	}
+
+	public void setValue(BigDecimal value) {
+		this.value = value;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 }

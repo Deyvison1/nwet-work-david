@@ -12,15 +12,18 @@ import api.networkn.models.dtos.CategoryDTO;
 import api.networkn.models.repository.CategoryRepository;
 import api.networkn.services.ICategoryService;
 import api.networkn.utils.mappers.ICategoryMapper;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @Service
 public class CategoryServiceImp implements ICategoryService {
 
 	private final CategoryRepository categoryRepository;
 	private final ICategoryMapper categoryMapper;
 
+	public CategoryServiceImp(final CategoryRepository categoryRepository, final ICategoryMapper categoryMapper) {
+		this.categoryRepository = categoryRepository;
+		this.categoryMapper = categoryMapper;
+	}
+	
 	@Override
 	public Page<Category> getAll(Pageable page) {
 		return categoryRepository.findAll(page);
@@ -49,7 +52,11 @@ public class CategoryServiceImp implements ICategoryService {
 	}
 
 	private Category montarCategory(CategoryDTO categoryDTO) {
-		return Category.builder().id(categoryDTO.getId()).description(categoryDTO.getDescription()).name(categoryDTO.getName()).build();
+		Category category = new Category();
+		category.setId(categoryDTO.getId());
+		category.setName(categoryDTO.getName());
+		category.setDescription(categoryDTO.getDescription());
+		return category;
 	}
 
 	@Override

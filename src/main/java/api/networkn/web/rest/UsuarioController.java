@@ -26,16 +26,19 @@ import api.networkn.security.jwt.JwtService;
 import api.networkn.services.impl.UsuarioServiceImpl;
 import api.networkn.web.rest.dtos.CredenciaisDTO;
 import api.networkn.web.rest.dtos.TokenDTO;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/usuario")
-@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioServiceImpl usuarioService;
     private final JwtService jwtService;
 
+    public UsuarioController(final UsuarioServiceImpl usuarioService, final JwtService jwtService) {
+    	this.usuarioService = usuarioService;
+    	this.jwtService = jwtService;
+    }
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,9 +68,9 @@ public class UsuarioController {
     @PostMapping("/auth")
     public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
         try{
-            Usuario usuario = Usuario.builder()
-                    .login(credenciais.getLogin())
-                    .senha(credenciais.getSenha()).build();
+            Usuario usuario = new Usuario();
+            usuario.setLogin(credenciais.getLogin());
+            usuario.setSenha(credenciais.getSenha());
             UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);
             usuario.setRole(usuarioAutenticado.getAuthorities().toString());
             String token = jwtService.gerarToken(usuario);

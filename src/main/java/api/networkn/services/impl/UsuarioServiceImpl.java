@@ -47,8 +47,13 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	}
 
 	public Usuario montarUsuario(UsuarioDTO user) {
-		return Usuario.builder().id(user.getId()).login(user.getLogin()).senha(encoder.encode(user.getSenha()))
-				.role(user.getRole()).updatedAt(LocalDateTime.now()).build();
+		Usuario usuario = new Usuario();
+		usuario.setId(user.getId());
+		usuario.setLogin(user.getLogin());
+		usuario.setSenha(encoder.encode(user.getSenha()));
+		usuario.setRole(user.getRole());
+		usuario.setUpdatedAt(LocalDateTime.now());
+		return usuario;
 	}
 
 	@Transactional

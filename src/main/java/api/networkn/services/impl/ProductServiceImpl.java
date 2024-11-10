@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class ProductServiceImpl implements IProductService {
 	private IProductRepository productRepository;
 	private IProductMapper productMapper;
 
-	@Autowired
 	public ProductServiceImpl(IProductRepository productRepository, IProductMapper productMapper) {
 		this.productRepository = productRepository;
 		this.productMapper = productMapper;
@@ -38,10 +36,17 @@ public class ProductServiceImpl implements IProductService {
 	}
 	
 	private Product mountProduct(ProductDTO productDTO) {
-		return Product.builder().category(productDTO.getCategory()).name(productDTO.getName())
-				.description(productDTO.getDescription()).value(productDTO.getValue()).id(productDTO.getId())
-				.speedDownload(productDTO.getSpeedDownload()).speedUpload(productDTO.getSpeedUpload())
-				.taxaAdesao(productDTO.getTaxaAdesao()).valueWifi(productDTO.getValueWifi()).build();
+		Product product = new Product();
+		product.setId(productDTO.getId());
+		product.setCategory(productDTO.getCategory());
+		product.setName(productDTO.getName());
+		product.setDescription(productDTO.getDescription());
+		product.setValue(productDTO.getValue());
+		product.setSpeedDownload(productDTO.getSpeedDownload());
+		product.setSpeedUpload(productDTO.getSpeedUpload());
+		product.setTaxaAdesao(productDTO.getTaxaAdesao());
+		product.setValueWifi(productDTO.getValueWifi());
+		return product;
 	}
 
 	@Override
