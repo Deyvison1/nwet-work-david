@@ -1,16 +1,14 @@
-FROM ubuntu:latest AS build
+FROM maven:3.9.8-eclipse-temurin-alpine as build
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
+COPY ./src src/
+COPY ./pom.xml pom.xml
 
-RUN apt-get install maven -y
-RUN mvn clean install
+RUN mvn clean verify
 
-FROM openjdk:17-jdk-slim
+FROM maven:3.9.8-eclipse-temurin:17-jre-alpine
+
+COPY --from=builder target/*.jar NetWorkDavid-0.0.1-SNAPSHOT.jar
 
 EXPOSE 8080
 
-COPY --from=build /target/net-work-david-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+CMD ["java", "-jar", "NetWorkDavid-0.0.1-SNAPSHOT.jar"]
