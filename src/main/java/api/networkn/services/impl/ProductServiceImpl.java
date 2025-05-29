@@ -2,12 +2,12 @@ package api.networkn.services.impl;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import api.networkn.exception.NotFoundException;
 import api.networkn.models.Product;
 import api.networkn.models.dtos.ProductDTO;
 import api.networkn.models.repository.IProductRepository;
@@ -28,15 +28,11 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public ProductDTO updateProduct(ProductDTO productDTO) {
 		Product product = findById(productDTO.getId());
-		if (Objects.nonNull(product)) {
-			Product productAAtualizar = mountProduct(productDTO);
-			return productMapper.toDto(productRepository.save(productAAtualizar));
-		}
-		return null;
+		Product productAAtualizar = mountProduct(productDTO, product);
+		return productMapper.toDto(productRepository.save(productAAtualizar));
 	}
-	
-	private Product mountProduct(ProductDTO productDTO) {
-		Product product = new Product();
+
+	private Product mountProduct(ProductDTO productDTO, Product product) {
 		product.setId(productDTO.getId());
 		product.setCategory(productDTO.getCategory());
 		product.setName(productDTO.getName());
@@ -56,14 +52,15 @@ public class ProductServiceImpl implements IProductService {
 			productRepository.delete(product);
 		}
 	}
-	
+
+	private Product findById(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new NotFoundException());
+	}
+
 	@Override
-	public Product findById(Long id) {
-		Optional<Product> product = productRepository.findById(id);
-		if(product.isPresent()) {
-			return product.get();
-		}
-		return null;
+	public ProductDTO findByIdDTO(Long id) {
+		Product product = findById(id);
+		return productMapper.toDto(product);
 	}
 
 	@Override
@@ -75,7 +72,7 @@ public class ProductServiceImpl implements IProductService {
 	public Page<Product> getAll(Pageable page) {
 		return productRepository.findAll(page);
 	}
-	
+
 	@Override
 	public List<ProductDTO> getAll() {
 		return productMapper.toDto(productRepository.findAll());

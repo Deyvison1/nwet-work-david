@@ -50,6 +50,38 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
+	public Product(Long id, String name, String description, Integer speedDownload, Integer speedUpload,
+			BigDecimal taxaAdesao, BigDecimal valueWifi, BigDecimal value, Category category, LocalDateTime createdAt,
+			LocalDateTime updatedAt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.speedDownload = speedDownload;
+		this.speedUpload = speedUpload;
+		this.taxaAdesao = taxaAdesao;
+		this.valueWifi = valueWifi;
+		this.value = value;
+		this.category = category;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	
+	public Product(String name, String description, Integer speedDownload, Integer speedUpload,
+			BigDecimal taxaAdesao, BigDecimal valueWifi, BigDecimal value, Category category, LocalDateTime createdAt,
+			LocalDateTime updatedAt) {
+		this.name = name;
+		this.description = description;
+		this.speedDownload = speedDownload;
+		this.speedUpload = speedUpload;
+		this.taxaAdesao = taxaAdesao;
+		this.valueWifi = valueWifi;
+		this.value = value;
+		this.category = category;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
 	public Long getId() {
 		return id;
 	}

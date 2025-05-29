@@ -32,6 +32,24 @@ public class Category implements Serializable {
 	@Column(name = "updated_at", nullable = true, updatable = true)
 	private LocalDateTime updatedAt;
 	public Category() { }
+	
+	public Category(Long id, String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	
+	public Category(String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		this.name = name;
+		this.description = description;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+
 	public Long getId() {
 		return id;
 	}

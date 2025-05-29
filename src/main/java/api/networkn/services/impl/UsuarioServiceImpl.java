@@ -2,9 +2,6 @@ package api.networkn.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import api.networkn.exception.NotFoundException;
 import api.networkn.exception.SenhaInvalidaException;
 import api.networkn.models.Usuario;
 import api.networkn.models.dtos.UsuarioDTO;
@@ -39,50 +37,45 @@ public class UsuarioServiceImpl implements UserDetailsService {
 	}
 
 	public Usuario findById(Long id) {
-		Optional<Usuario> user = repository.findById(id);
-		if (user.isPresent()) {
-			return user.get();
-		}
-		return null;
+		return repository.findById(id).orElseThrow(() -> new NotFoundException());
 	}
 
-	public Usuario montarUsuario(UsuarioDTO user) {
-		Usuario usuario = new Usuario();
-		usuario.setId(user.getId());
-		usuario.setLogin(user.getLogin());
-		usuario.setSenha(encoder.encode(user.getSenha()));
-		usuario.setRole(user.getRole());
+	public Usuario montarUsuario(UsuarioDTO userDTO, Usuario usuario) {
+		usuario.setLogin(userDTO.getLogin());
+		setPassword(userDTO, usuario);
+		usuario.setRole(userDTO.getRole());
 		usuario.setUpdatedAt(LocalDateTime.now());
 		return usuario;
+	}
+
+	private void setPassword(UsuarioDTO dto, Usuario usuario) {
+		if (!dto.getSenha().equals(usuario.getSenha())) {
+			usuario.setSenha(encoder.encode(dto.getSenha()));
+		}
 	}
 
 	@Transactional
 	public UsuarioDTO editar(UsuarioDTO usuarioDTO) {
 		Usuario userEntity = findById(usuarioDTO.getId());
-		if (Objects.nonNull(userEntity)) {
-			Usuario usuarioAAtualizar = montarUsuario(usuarioDTO);
+		Usuario usuarioAAtualizar = montarUsuario(usuarioDTO, userEntity);
 
-			return userMapper.toDto(repository.save(usuarioAAtualizar));
-		}
-		return null;
+		return userMapper.toDto(repository.save(usuarioAAtualizar));
 	}
 
 	public List<UsuarioDTO> getAll() {
 		return userMapper.toDto(repository.findAll());
 	}
-	
+
 	@Transactional
 	public void delete(Long id) {
 		Usuario userEntity = findById(id);
-		if(Objects.nonNull(userEntity)) {
-			repository.delete(userEntity);
-		}
+		repository.delete(userEntity);
 	}
 
 	public UserDetails autenticar(Usuario usuario) {
 		UserDetails user = loadUserByUsername(usuario.getLogin());
 		boolean senhasBatem = encoder.matches(usuario.getSenha(), user.getPassword());
-		
+
 		if (senhasBatem) {
 			return user;
 		}

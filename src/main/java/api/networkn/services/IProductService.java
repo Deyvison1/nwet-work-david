@@ -11,18 +11,18 @@ import api.networkn.models.dtos.ProductDTO;
 
 @Service
 public interface IProductService {
-	
+
 	Product addProduct(Product product);
-	
+
 	ProductDTO updateProduct(ProductDTO Product);
-	
+
 	Page<Product> getAll(Pageable page);
-	
+
 	List<ProductDTO> getAll();
-	
+
 	void deleteProduct(Long id);
-		
-	Product findById(Long id);
-	
+
+	ProductDTO findByIdDTO(Long id);
+
 	Long contarTodos();
 }

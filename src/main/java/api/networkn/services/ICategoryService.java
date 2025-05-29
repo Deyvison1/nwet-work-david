@@ -1,6 +1,5 @@
 package api.networkn.services;
 
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,14 +11,16 @@ import api.networkn.models.dtos.CategoryDTO;
 public interface ICategoryService {
 
 	Page<Category> getAll(Pageable pageable);
-	
+
 	List<CategoryDTO> getAll();
-	
+
 	CategoryDTO insert(Category category);
-	
+
 	CategoryDTO update(CategoryDTO categoryDTO);
-	
+
 	void delete(Long categoryId);
-	
+
+	CategoryDTO findByIdDTO(Long id);
+
 	Long contarTodos();
 }
