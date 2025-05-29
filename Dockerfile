@@ -1,14 +1,16 @@
-# Step 1: Use an official OpenJDK base image from Docker Hub
-FROM openjdk:17-jdk-alpine
+FROM ubuntu:latest AS build
 
-# Step 2: Set the working directory inside the container
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
-# Step 3: Copy the Spring Boot JAR file into the container
-COPY target/NetWorkDavid-0.0.1-SNAPSHOT.jar /app/NetWorkDavid-0.0.1-SNAPSHOT.jar
+RUN apt-get install maven -y
+RUN mvn clean install
 
-# Step 4: Expose the port your application runs on
+FROM openjdk:17-jdk-slim
+
 EXPOSE 8080
 
-# Step 5: Define the command to run your Spring Boot application
-CMD ["java", "-jar", "/app/NetWorkDavid-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /target/NetWorkDavid-0.0.1-SNAPSHOT.jar app.jar
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
