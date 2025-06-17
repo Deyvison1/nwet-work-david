@@ -1,13 +1,11 @@
 
-# Use a base image with Java 17
+
+FROM maven:3.8.6 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
+
 FROM openjdk:17
- 
-# Copy the JAR package into the image
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
- 
-# Expose the application port
-EXPOSE 8090
- 
-# Run the App
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+COPY --from=build /home/app/target/NetWorkDavid-0.0.1-SNAPSHOT.jar /usr/local/lib/NetWorkDavid.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/local/lib/NetWorkDavid.jar"]
