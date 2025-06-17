@@ -79,5 +79,11 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+    
+    @PostMapping("/created")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuario createUser(@RequestBody @Validated Usuario usuario ){
+        return usuarioService.salvar(usuario);
+    }
 
 }

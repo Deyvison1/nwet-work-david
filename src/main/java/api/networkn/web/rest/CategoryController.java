@@ -2,6 +2,9 @@ package api.networkn.web.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import api.networkn.file.exporter.MediaTypes;
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
 import api.networkn.services.ICategoryService;
@@ -24,13 +31,13 @@ import api.networkn.services.ICategoryService;
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
-	
+
 	private final ICategoryService categoryService;
-	
+
 	public CategoryController(final ICategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	@GetMapping
 	public ResponseEntity<List<Category>> getAll(Pageable pageable) {
@@ -41,29 +48,49 @@ public class CategoryController {
 		headers.add("X_TOTAL_COUNT", String.valueOf(total));
 		return new ResponseEntity<List<Category>>(listCategory.getContent(), headers, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	@GetMapping("/get-all")
 	public List<CategoryDTO> getAll() {
 		return categoryService.getAll();
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public CategoryDTO insert(@RequestBody Category category) {
 		return categoryService.insert(category);
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	public CategoryDTO update(@RequestBody CategoryDTO categoryDTO) {
 		return categoryService.update(categoryDTO);
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{categoryId}")
 	public void delete(@PathVariable Long categoryId) {
 		categoryService.delete(categoryId);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	@GetMapping("/import")
+	public List<CategoryDTO> massCreation(@RequestParam("file") MultipartFile file) throws Exception {
+		return categoryService.massCreation(file);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	@GetMapping("/export-page")
+	public ResponseEntity<Resource> exportPage(Pageable pageable, HttpServletRequest request) throws Exception {
+		String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+		Resource file = categoryService.exportPage(pageable, acceptHeader);
+
+		String contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
+		String fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equalsIgnoreCase(contentType) ? ".xlsx" : ".csv";
+		String fileName = "category_exported" + fileExtension;
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"").body(file);
 	}
 
 }

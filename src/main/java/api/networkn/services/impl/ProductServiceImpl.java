@@ -1,13 +1,18 @@
 package api.networkn.services.impl;
-
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import api.networkn.exception.NotFoundException;
+import api.networkn.exception.UnsupportedFileException;
+import api.networkn.file.imported.contract.FileImported;
+import api.networkn.file.imported.factory.FileImportedFactory;
 import api.networkn.models.Product;
 import api.networkn.models.dtos.ProductDTO;
 import api.networkn.models.repository.IProductRepository;
@@ -77,6 +82,7 @@ public class ProductServiceImpl implements IProductService {
 	public List<ProductDTO> getAll() {
 		return productMapper.toDto(productRepository.findAll());
 	}
+	
 
 	@Override
 	public Long contarTodos() {

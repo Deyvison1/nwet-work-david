@@ -1,12 +1,18 @@
 package api.networkn.models.dtos;
 
+import java.time.LocalDateTime;
+
 public class CategoryDTO {
 
 	private Long id;
-	
+
 	private String name;
-	
+
 	private String description;
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
 
 	public Long getId() {
 		return id;
@@ -31,5 +37,21 @@ public class CategoryDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 }
