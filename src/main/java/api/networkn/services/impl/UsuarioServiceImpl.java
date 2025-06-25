@@ -2,7 +2,14 @@ package api.networkn.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,8 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import api.networkn.config.SortByConfig;
 import api.networkn.exception.NotFoundException;
 import api.networkn.exception.SenhaInvalidaException;
+import api.networkn.exception.SortByException;
 import api.networkn.models.Usuario;
 import api.networkn.models.dtos.UsuarioDTO;
 import api.networkn.models.repository.IUsuarioRepository;
@@ -54,6 +63,24 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		}
 	}
 
+	public Long countBy() {
+		return this.repository.count();
+	}
+	
+	@Transactional
+	public UsuarioDTO editUserPartial(UsuarioDTO usuarioDTO) {
+		Usuario userEntity = findById(usuarioDTO.getId());
+		mountUserPartial(usuarioDTO, userEntity);
+
+		return userMapper.toDto(repository.save(userEntity));
+	}
+	
+	private void mountUserPartial(UsuarioDTO userDTO, Usuario usuario) {
+		usuario.setLogin(userDTO.getLogin());
+		setPassword(userDTO, usuario);
+	}
+	
+
 	@Transactional
 	public UsuarioDTO editar(UsuarioDTO usuarioDTO) {
 		Usuario userEntity = findById(usuarioDTO.getId());
@@ -62,8 +89,14 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		return userMapper.toDto(repository.save(usuarioAAtualizar));
 	}
 
-	public List<UsuarioDTO> getAll() {
-		return userMapper.toDto(repository.findAll());
+	public Page<UsuarioDTO> getAll(Pageable pageable, String sortBy) {
+		if (Strings.isBlank(sortBy)) {
+			throw new SortByException("Not found sort by");
+		}
+		Pageable sortedByPriceDescNameAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by(SortByConfig.getDirection(sortBy), SortByConfig.getFieldName(sortBy)));
+		List<UsuarioDTO> usersDTO = userMapper.toDto(repository.findAll(sortedByPriceDescNameAsc));
+		return new PageImpl<>(usersDTO);
 	}
 
 	@Transactional
@@ -81,6 +114,10 @@ public class UsuarioServiceImpl implements UserDetailsService {
 		}
 
 		throw new SenhaInvalidaException();
+	}
+
+	public UsuarioDTO findByLogin(String login) {
+		return this.userMapper.toDto(this.repository.findByLogin(login).orElseThrow(() -> new NotFoundException()));
 	}
 
 	@Override

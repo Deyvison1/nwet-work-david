@@ -8,5 +8,4 @@ import api.networkn.models.dtos.UsuarioDTO;
 
 @Mapper(componentModel="spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IUsuarioMapper extends BaseEntityMapper<Usuario, UsuarioDTO> {
-
 }

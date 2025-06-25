@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import api.networkn.exception.UnsupportedFileException;
 import api.networkn.models.Category;
 import api.networkn.models.dtos.CategoryDTO;
 

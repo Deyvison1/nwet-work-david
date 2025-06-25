@@ -31,7 +31,6 @@ public class JwtService {
 		
 		HashMap<String, Object> claims = new HashMap<String, Object>();
 		claims.put("roles", usuario.getRole());
-
 		return Jwts.builder().setClaims(claims).setSubject(usuario.getLogin()).setExpiration(data)
 				.signWith(SignatureAlgorithm.HS512, chaveAssinatura).compact();
 	}

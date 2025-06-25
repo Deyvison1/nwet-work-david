@@ -60,8 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatcher("/**").authorizeRequests(requests -> requests
                 .antMatchers(HttpMethod.POST, "/api/usuario/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/product/get-all")
-                .permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated())
                 .sessionManagement(management -> management

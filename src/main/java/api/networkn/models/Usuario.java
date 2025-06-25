@@ -18,11 +18,14 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique = true)
+    
+    @Column(unique = true, nullable = false)
     private String login;
-    @Column
+    
+    @Column(nullable = false)
     private String senha;
-    @Column
+    
+    @Column(nullable = false)
     private String role;
     
     @Column(name = "created_at", nullable = false, updatable = false)
